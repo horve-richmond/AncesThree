@@ -1,0 +1,5 @@
+{
+  "name": "AncesTree",
+  "description": "A mobile-first family lineage PWA to preserve history, visualize family trees, and connect generations.",
+  "requestFramePermissions": []
+}

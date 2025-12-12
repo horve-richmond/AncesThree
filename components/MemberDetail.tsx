@@ -54,7 +54,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ member, allMembers, events,
   if (isEditing) {
     return (
       <div className="h-full w-full bg-white flex flex-col animate-in fade-in">
-        <div className="p-4 border-b flex justify-between items-center bg-white z-10 sticky top-0">
+        <div className="p-4 border-b flex justify-between items-center bg-white z-10 sticky top-0 safe-area-top">
            <button onClick={() => setIsEditing(false)} className="text-slate-500 text-sm font-medium hover:text-slate-800">Cancel</button>
            <h2 className="text-lg font-bold">Edit Profile</h2>
            <button onClick={handleSave} className="text-indigo-600 font-bold text-sm">Save</button>
@@ -167,7 +167,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ member, allMembers, events,
                 </button>
             )}
           </div>
-          <div className="px-6 pb-6 relative">
+          <div className="px-6 pb-4 relative">
              <div className="flex justify-between items-end -mt-12 mb-3">
                  <div className="w-24 h-24 rounded-full border-4 border-white bg-white shadow-md overflow-hidden flex-shrink-0">
                     {member.photoUrl ? (
@@ -191,237 +191,234 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ member, allMembers, events,
           </div>
       </div>
 
-      {/* 2. Split Content Area (Vertical Tabs + Content) */}
-      <div className="flex flex-1 overflow-hidden relative">
-          
-          {/* Sidebar / Vertical Tabs */}
-          <div className="w-20 md:w-56 bg-white border-r border-slate-100 flex-shrink-0 overflow-y-auto hide-scrollbar flex flex-col py-2">
-              <TabButton 
+      {/* 2. Horizontal Tabs (Sticky) - Pill Style */}
+      <div className="flex-shrink-0 bg-white sticky top-0 z-30 py-3">
+          <div className="flex px-4 gap-3 overflow-x-auto no-scrollbar snap-x">
+            <TabButton 
                 active={activeTab === 'overview'} 
                 onClick={() => setActiveTab('overview')} 
-                icon={<User size={20} />} 
+                icon={<User size={16} />} 
                 label="Overview" 
-              />
-              <TabButton 
+            />
+            <TabButton 
                 active={activeTab === 'family'} 
                 onClick={() => setActiveTab('family')} 
-                icon={<Heart size={20} />} 
+                icon={<Heart size={16} />} 
                 label="Family" 
-              />
-              <TabButton 
+            />
+            <TabButton 
                 active={activeTab === 'attributes'} 
                 onClick={() => setActiveTab('attributes')} 
-                icon={<Star size={20} />} 
-                label="Attributes" 
-              />
-              <TabButton 
+                icon={<Star size={16} />} 
+                label="Traits" 
+            />
+            <TabButton 
                 active={activeTab === 'history'} 
                 onClick={() => setActiveTab('history')} 
-                icon={<History size={20} />} 
+                icon={<History size={16} />} 
                 label="Timeline" 
-              />
+            />
           </div>
+      </div>
 
-          {/* Content Pane */}
-          <div className="flex-1 overflow-y-auto bg-slate-50 p-4 md:p-6 pb-24">
-              
-              {/* TAB: OVERVIEW */}
-              {activeTab === 'overview' && (
-                  <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                      {/* Biography */}
-                      <section className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                          <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide mb-3 flex items-center">
-                              <User size={16} className="mr-2 text-indigo-500"/> Biography
-                          </h3>
-                          <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-line">
-                              {member.bio || "No biography provided."}
-                          </p>
-                      </section>
+      {/* 3. Content Pane (Scrollable) */}
+      <div className="flex-1 overflow-y-auto bg-slate-50 p-4 pb-24">
+          
+          {/* TAB: OVERVIEW */}
+          {activeTab === 'overview' && (
+              <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  {/* Biography */}
+                  <section className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-3 flex items-center">
+                          <User size={14} className="mr-2 text-indigo-500"/> Biography
+                      </h3>
+                      <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-line">
+                          {member.bio || "No biography provided."}
+                      </p>
+                  </section>
 
-                      {/* Personal Info */}
-                      <section className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                          <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide mb-3 flex items-center">
-                              <Calendar size={16} className="mr-2 text-indigo-500"/> Personal Details
-                          </h3>
-                          <div className="space-y-3">
-                               <InfoRow label="Born" value={member.birthDate} />
-                               {member.deathDate && <InfoRow label="Died" value={member.deathDate} />}
-                               <InfoRow label="Gender" value={member.gender} capitalize />
-                               <InfoRow label="Location" value={member.location} />
-                               <InfoRow label="Generation" value={`Gen ${member.generation}`} />
-                          </div>
-                      </section>
-                  </div>
-              )}
+                  {/* Personal Info */}
+                  <section className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-3 flex items-center">
+                          <Calendar size={14} className="mr-2 text-indigo-500"/> Personal Details
+                      </h3>
+                      <div className="space-y-3">
+                           <InfoRow label="Born" value={member.birthDate} />
+                           {member.deathDate && <InfoRow label="Died" value={member.deathDate} />}
+                           <InfoRow label="Gender" value={member.gender} capitalize />
+                           <InfoRow label="Location" value={member.location} />
+                           <InfoRow label="Generation" value={`Gen ${member.generation}`} />
+                      </div>
+                  </section>
+              </div>
+          )}
 
-              {/* TAB: FAMILY */}
-              {activeTab === 'family' && (
-                  <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                      
-                      {/* Marriage Details */}
-                      <section className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                          <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide mb-3 flex items-center">
-                              <Heart size={16} className="mr-2 text-rose-500"/> Marriage Details
-                          </h3>
-                          {member.spouses.length > 0 ? (
-                              <ul className="space-y-3">
-                                  {member.spouses.map(spouseId => {
-                                      const spouseName = getMemberName(spouseId);
-                                      const event = marriageEvents.find(e => e.involvedMemberIds.includes(spouseId));
-                                      return (
-                                          <li key={spouseId} className="flex items-start">
-                                              <div className="w-1.5 h-1.5 rounded-full bg-rose-400 mt-1.5 mr-2 flex-shrink-0"></div>
-                                              <div>
-                                                  <span className="text-slate-800 font-medium block">Spouse: {spouseName}</span>
-                                                  {event && (
-                                                      <span className="text-xs text-slate-500 block mt-0.5">
-                                                          Married on {event.date} • {event.title}
-                                                      </span>
-                                                  )}
-                                              </div>
-                                          </li>
-                                      );
-                                  })}
-                              </ul>
-                          ) : (
-                              <p className="text-slate-500 text-sm italic">No marriage records found.</p>
-                          )}
-                      </section>
-
-                      {/* Parents & Children */}
-                      <section className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                          <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide mb-3 flex items-center">
-                              <Users size={16} className="mr-2 text-indigo-500"/> Lineage
-                          </h3>
-                          <div className="grid grid-cols-1 gap-4">
-                              <div>
-                                  <h4 className="text-xs font-bold text-slate-400 uppercase mb-2">Parents</h4>
-                                  {member.parents.length > 0 ? (
-                                      <div className="flex flex-wrap gap-2">
-                                          {member.parents.map(pid => (
-                                              <span key={pid} className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium">
-                                                  {getMemberName(pid)}
-                                              </span>
-                                          ))}
-                                      </div>
-                                  ) : <span className="text-sm text-slate-400 italic">Unknown</span>}
-                              </div>
-                              
-                              <div className="border-t border-slate-50 pt-4">
-                                  <h4 className="text-xs font-bold text-slate-400 uppercase mb-2">Children</h4>
-                                  {member.children.length > 0 ? (
-                                      <div className="flex flex-wrap gap-2">
-                                          {member.children.map(cid => (
-                                              <span key={cid} className="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-sm font-medium">
-                                                  {getMemberName(cid)}
-                                              </span>
-                                          ))}
-                                      </div>
-                                  ) : <span className="text-sm text-slate-400 italic">No children listed</span>}
-                              </div>
-                          </div>
-                      </section>
-                  </div>
-              )}
-
-              {/* TAB: ATTRIBUTES */}
-              {activeTab === 'attributes' && (
-                  <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                      
-                      {/* Family Roles */}
-                      <section className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                          <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide mb-3 flex items-center">
-                              <Award size={16} className="mr-2 text-amber-500"/> Roles in Family
-                          </h3>
-                          <div className="flex flex-wrap gap-2">
-                              {member.attributes.roles.length > 0 ? member.attributes.roles.map(role => (
-                                  <span key={role} className="px-3 py-1.5 bg-amber-50 text-amber-700 rounded-lg text-sm font-bold border border-amber-100">
-                                      {role}
-                                  </span>
-                              )) : <span className="text-slate-500 text-sm">No specific roles defined.</span>}
-                          </div>
-                      </section>
-
-                      {/* Skills & Talents */}
-                      <section className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                          <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide mb-3 flex items-center">
-                              <Briefcase size={16} className="mr-2 text-indigo-500"/> Skills & Talents
-                          </h3>
-                          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                              {member.attributes.skills.length > 0 ? member.attributes.skills.map(skill => (
-                                  <li key={skill} className="flex items-center text-sm text-slate-600 bg-slate-50 p-2 rounded-lg">
-                                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mr-2"></div>
-                                      {skill}
-                                  </li>
-                              )) : <span className="text-slate-500 text-sm">No skills listed.</span>}
-                          </ul>
-                      </section>
-
-                      {/* Personality */}
-                      <section className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                          <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide mb-3 flex items-center">
-                              <Smile size={16} className="mr-2 text-teal-500"/> Personality Traits
-                          </h3>
-                          <div className="flex flex-wrap gap-2">
-                              {member.attributes.traits.length > 0 ? member.attributes.traits.map(trait => (
-                                  <span key={trait} className="px-3 py-1 bg-teal-50 text-teal-700 rounded-full text-xs font-medium border border-teal-100">
-                                      {trait}
-                                  </span>
-                              )) : <span className="text-slate-500 text-sm">No traits listed.</span>}
-                          </div>
-                      </section>
-                  </div>
-              )}
-
-              {/* TAB: HISTORY */}
-              {activeTab === 'history' && (
-                  <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                      
-                      {/* Achievements */}
-                      <section className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                          <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide mb-3 flex items-center">
-                              <Star size={16} className="mr-2 text-yellow-500"/> Achievements
-                          </h3>
-                          {achievementEvents.length > 0 ? (
-                              <div className="space-y-4">
-                                  {achievementEvents.map(event => (
-                                      <div key={event.id} className="relative pl-4 border-l-2 border-yellow-200">
-                                          <div className="text-xs font-bold text-yellow-600 mb-0.5">{event.date}</div>
-                                          <div className="font-bold text-slate-800">{event.title}</div>
-                                          <div className="text-sm text-slate-600 mt-1">{event.description}</div>
-                                      </div>
-                                  ))}
-                              </div>
-                          ) : (
-                              <p className="text-slate-500 text-sm italic">No specific achievements recorded.</p>
-                          )}
-                      </section>
-
-                      {/* Historical Events */}
-                      <section className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                          <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide mb-3 flex items-center">
-                              <History size={16} className="mr-2 text-indigo-500"/> Historical Events
-                          </h3>
-                          {historyEvents.length > 0 ? (
-                              <div className="space-y-4">
-                                  {historyEvents.map(event => (
-                                      <div key={event.id} className="bg-slate-50 p-3 rounded-xl">
-                                          <div className="flex justify-between items-start mb-1">
-                                              <span className="font-bold text-slate-800 text-sm">{event.title}</span>
-                                              <span className="text-xs font-bold bg-white px-2 py-0.5 rounded shadow-sm text-slate-500">{event.date}</span>
+          {/* TAB: FAMILY */}
+          {activeTab === 'family' && (
+              <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  
+                  {/* Marriage Details */}
+                  <section className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-3 flex items-center">
+                          <Heart size={14} className="mr-2 text-rose-500"/> Marriage Details
+                      </h3>
+                      {member.spouses.length > 0 ? (
+                          <ul className="space-y-3">
+                              {member.spouses.map(spouseId => {
+                                  const spouseName = getMemberName(spouseId);
+                                  const event = marriageEvents.find(e => e.involvedMemberIds.includes(spouseId));
+                                  return (
+                                      <li key={spouseId} className="flex items-start">
+                                          <div className="w-1.5 h-1.5 rounded-full bg-rose-400 mt-1.5 mr-2 flex-shrink-0"></div>
+                                          <div>
+                                              <span className="text-slate-800 font-medium block">Spouse: {spouseName}</span>
+                                              {event && (
+                                                  <span className="text-xs text-slate-500 block mt-0.5">
+                                                      Married on {event.date} • {event.title}
+                                                  </span>
+                                              )}
                                           </div>
-                                          <p className="text-xs text-slate-600 leading-relaxed">{event.description}</p>
-                                      </div>
-                                  ))}
-                              </div>
-                          ) : (
-                              <p className="text-slate-500 text-sm italic">No other historical events recorded.</p>
-                          )}
-                      </section>
-                  </div>
-              )}
+                                      </li>
+                                  );
+                              })}
+                          </ul>
+                      ) : (
+                          <p className="text-slate-500 text-sm italic">No marriage records found.</p>
+                      )}
+                  </section>
 
-          </div>
+                  {/* Parents & Children */}
+                  <section className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-3 flex items-center">
+                          <Users size={14} className="mr-2 text-indigo-500"/> Lineage
+                      </h3>
+                      <div className="grid grid-cols-1 gap-4">
+                          <div>
+                              <h4 className="text-[10px] font-bold text-slate-400 uppercase mb-2">Parents</h4>
+                              {member.parents.length > 0 ? (
+                                  <div className="flex flex-wrap gap-2">
+                                      {member.parents.map(pid => (
+                                          <span key={pid} className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium">
+                                              {getMemberName(pid)}
+                                          </span>
+                                      ))}
+                                  </div>
+                              ) : <span className="text-sm text-slate-400 italic">Unknown</span>}
+                          </div>
+                          
+                          <div className="border-t border-slate-50 pt-4">
+                              <h4 className="text-[10px] font-bold text-slate-400 uppercase mb-2">Children</h4>
+                              {member.children.length > 0 ? (
+                                  <div className="flex flex-wrap gap-2">
+                                      {member.children.map(cid => (
+                                          <span key={cid} className="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-sm font-medium">
+                                              {getMemberName(cid)}
+                                          </span>
+                                      ))}
+                                  </div>
+                              ) : <span className="text-sm text-slate-400 italic">No children listed</span>}
+                          </div>
+                      </div>
+                  </section>
+              </div>
+          )}
+
+          {/* TAB: ATTRIBUTES */}
+          {activeTab === 'attributes' && (
+              <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  
+                  {/* Family Roles */}
+                  <section className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-3 flex items-center">
+                          <Award size={14} className="mr-2 text-amber-500"/> Roles in Family
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                          {member.attributes.roles.length > 0 ? member.attributes.roles.map(role => (
+                              <span key={role} className="px-3 py-1.5 bg-amber-50 text-amber-700 rounded-lg text-sm font-bold border border-amber-100">
+                                  {role}
+                              </span>
+                          )) : <span className="text-slate-500 text-sm">No specific roles defined.</span>}
+                      </div>
+                  </section>
+
+                  {/* Skills & Talents */}
+                  <section className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-3 flex items-center">
+                          <Briefcase size={14} className="mr-2 text-indigo-500"/> Skills & Talents
+                      </h3>
+                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {member.attributes.skills.length > 0 ? member.attributes.skills.map(skill => (
+                              <li key={skill} className="flex items-center text-sm text-slate-600 bg-slate-50 p-2 rounded-lg">
+                                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mr-2"></div>
+                                  {skill}
+                              </li>
+                          )) : <span className="text-slate-500 text-sm">No skills listed.</span>}
+                      </ul>
+                  </section>
+
+                  {/* Personality */}
+                  <section className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-3 flex items-center">
+                          <Smile size={14} className="mr-2 text-teal-500"/> Personality Traits
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                          {member.attributes.traits.length > 0 ? member.attributes.traits.map(trait => (
+                              <span key={trait} className="px-3 py-1 bg-teal-50 text-teal-700 rounded-full text-xs font-medium border border-teal-100">
+                                  {trait}
+                              </span>
+                          )) : <span className="text-slate-500 text-sm">No traits listed.</span>}
+                      </div>
+                  </section>
+              </div>
+          )}
+
+          {/* TAB: HISTORY */}
+          {activeTab === 'history' && (
+              <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  
+                  {/* Achievements */}
+                  <section className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-3 flex items-center">
+                          <Star size={14} className="mr-2 text-yellow-500"/> Achievements
+                      </h3>
+                      {achievementEvents.length > 0 ? (
+                          <div className="space-y-4">
+                              {achievementEvents.map(event => (
+                                  <div key={event.id} className="relative pl-4 border-l-2 border-yellow-200">
+                                      <div className="text-[10px] font-bold text-yellow-600 mb-0.5">{event.date}</div>
+                                      <div className="font-bold text-slate-800 text-sm">{event.title}</div>
+                                      <div className="text-xs text-slate-600 mt-1">{event.description}</div>
+                                  </div>
+                              ))}
+                          </div>
+                      ) : (
+                          <p className="text-slate-500 text-sm italic">No specific achievements recorded.</p>
+                      )}
+                  </section>
+
+                  {/* Historical Events */}
+                  <section className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-3 flex items-center">
+                          <History size={14} className="mr-2 text-indigo-500"/> Historical Events
+                      </h3>
+                      {historyEvents.length > 0 ? (
+                          <div className="space-y-4">
+                              {historyEvents.map(event => (
+                                  <div key={event.id} className="bg-slate-50 p-3 rounded-xl">
+                                      <div className="flex justify-between items-start mb-1">
+                                          <span className="font-bold text-slate-800 text-sm">{event.title}</span>
+                                          <span className="text-[10px] font-bold bg-white px-2 py-0.5 rounded shadow-sm text-slate-500">{event.date}</span>
+                                      </div>
+                                      <p className="text-xs text-slate-600 leading-relaxed">{event.description}</p>
+                                  </div>
+                              ))}
+                          </div>
+                      ) : (
+                          <p className="text-slate-500 text-sm italic">No other historical events recorded.</p>
+                      )}
+                  </section>
+              </div>
+          )}
       </div>
     </div>
   );
@@ -430,19 +427,18 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ member, allMembers, events,
 // --- SUB-COMPONENTS ---
 
 const TabButton = ({ active, onClick, icon, label }: { active: boolean, onClick: () => void, icon: React.ReactNode, label: string }) => (
-    <button 
+    <button
         onClick={onClick}
-        className={`w-full flex md:flex-row flex-col items-center md:items-center justify-center md:justify-start px-2 py-4 md:px-6 md:py-4 transition-all relative ${
-            active 
-            ? 'text-indigo-600 bg-indigo-50/50' 
-            : 'text-slate-400 hover:bg-slate-50 hover:text-slate-600'
+        className={`flex items-center px-5 py-2.5 rounded-full transition-all duration-300 whitespace-nowrap flex-shrink-0 gap-2 snap-center ${
+            active
+            ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200 scale-105 ring-2 ring-indigo-600 ring-offset-1'
+            : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-700'
         }`}
     >
-        {active && <div className="absolute left-0 top-0 bottom-0 w-1 bg-indigo-600 rounded-r"></div>}
-        <div className={`mb-1 md:mb-0 md:mr-3 ${active ? 'scale-110' : 'scale-100'} transition-transform`}>
-            {icon}
+        <div className={active ? "text-white" : "text-slate-400"}>
+           {icon}
         </div>
-        <span className={`text-[10px] md:text-sm font-bold md:font-medium tracking-tight ${active ? 'text-indigo-700' : ''}`}>{label}</span>
+        <span className="text-xs font-bold uppercase tracking-wider">{label}</span>
     </button>
 );
 

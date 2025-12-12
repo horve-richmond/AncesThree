@@ -246,7 +246,7 @@ const App: React.FC = () => {
     <div className="h-screen w-full flex flex-col bg-slate-50 overflow-hidden font-sans text-slate-900">
       
       {/* HEADER: Always show, Profile Drawer covers it */}
-      <header className="h-16 bg-white flex items-center justify-between px-4 shadow-sm z-50 flex-shrink-0 border-b border-slate-100">
+      <header className="h-16 bg-white flex items-center justify-between px-4 shadow-sm z-50 flex-shrink-0 border-b border-slate-100 safe-area-top">
         <h1 className="text-2xl font-black text-indigo-600 tracking-tighter">AncesTree</h1>
         <div className="flex items-center gap-2">
             {/* Add Member Button - Only visible on Tree View (and when not covered by profile) */}
@@ -277,7 +277,7 @@ const App: React.FC = () => {
       {isSearchOpen && (
         <div className="fixed inset-0 z-[60] bg-white flex flex-col animate-in slide-in-from-right duration-300">
             {/* Header */}
-            <div className="p-4 border-b flex items-center gap-3 bg-white shadow-sm flex-shrink-0">
+            <div className="p-4 border-b flex items-center gap-3 bg-white shadow-sm flex-shrink-0 safe-area-top">
                 <button 
                     onClick={() => setIsSearchOpen(false)}
                     className="p-2 -ml-2 hover:bg-slate-100 rounded-full text-slate-600 transition-colors"
@@ -297,7 +297,7 @@ const App: React.FC = () => {
                 </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-4">
+            <div className="flex-1 overflow-y-auto p-4 no-scrollbar">
                 {searchQuery.trim() === '' ? (
                     <div className="text-center text-slate-400 mt-20">
                         {isHistoryView ? (
@@ -396,7 +396,7 @@ const App: React.FC = () => {
           
           {/* Drawer Panel */}
           <div className={`absolute inset-y-0 right-0 w-full sm:max-w-md bg-white flex flex-col shadow-2xl transition-transform duration-500 ease-out ${isAddMemberOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-              <div className="p-4 border-b flex items-center justify-between bg-white shadow-sm flex-shrink-0">
+              <div className="p-4 border-b flex items-center justify-between bg-white shadow-sm flex-shrink-0 safe-area-top">
                   <div className="flex items-center">
                     <button 
                         onClick={() => setIsAddMemberOpen(false)}
@@ -408,7 +408,7 @@ const App: React.FC = () => {
                   </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-6 space-y-6">
+              <div className="flex-1 overflow-y-auto p-6 space-y-6 no-scrollbar">
                   {/* Section 1: Connection */}
                   <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
                       <h3 className="text-sm font-bold text-indigo-800 mb-3 flex items-center">
@@ -509,7 +509,7 @@ const App: React.FC = () => {
                   </div>
               </div>
 
-              <div className="p-4 border-t bg-white safe-area-bottom">
+              <div className="p-4 border-t bg-white safe-area-bottom pb-safe">
                   <button 
                     onClick={handleAddMemberSubmit}
                     disabled={!newMemberData.name || !newMemberData.relatedToId}
@@ -535,11 +535,11 @@ const App: React.FC = () => {
         {/* AI Chat Overlay */}
         {chatOpen && (
             <div className="absolute inset-0 bg-white/95 z-50 flex flex-col backdrop-blur-sm animate-in fade-in slide-in-from-bottom-10">
-                <div className="p-4 border-b flex justify-between items-center bg-indigo-600 text-white shadow-md">
+                <div className="p-4 border-b flex justify-between items-center bg-indigo-600 text-white shadow-md safe-area-top">
                     <h2 className="font-bold flex items-center"><Sparkles size={18} className="mr-2"/> Family Historian AI</h2>
                     <button onClick={() => setChatOpen(false)} className="p-1 hover:bg-white/20 rounded">Close</button>
                 </div>
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar">
                     {chatHistory.length === 0 && (
                         <div className="text-center text-slate-400 mt-10">
                             <p className="mb-2">Ask me anything about the family history!</p>
@@ -555,7 +555,7 @@ const App: React.FC = () => {
                     ))}
                     {isChatLoading && <div className="text-xs text-slate-400 animate-pulse">Historian is thinking...</div>}
                 </div>
-                <form onSubmit={handleChatSubmit} className="p-4 border-t bg-white">
+                <form onSubmit={handleChatSubmit} className="p-4 border-t bg-white pb-safe">
                     <div className="flex gap-2">
                         <input 
                             type="text" 
@@ -575,7 +575,7 @@ const App: React.FC = () => {
 
       {/* PROFILE DRAWER - Slide Over */}
       <div className={`fixed inset-0 z-[70] bg-white transition-transform duration-500 ease-out ${view === 'profile' ? 'translate-x-0' : 'translate-x-full'}`}>
-         <div className="h-full w-full overflow-hidden">
+         <div className="h-full w-full overflow-hidden no-scrollbar">
             {selectedMemberId && (
                 <MemberDetail 
                     member={members.find(m => m.id === selectedMemberId)!} 
@@ -600,7 +600,7 @@ const App: React.FC = () => {
       )}
 
       {/* Bottom Navigation Bar */}
-      <nav className="h-20 bg-white border-t border-slate-200 flex justify-around items-center px-2 pb-2 z-50 shadow-[0_-5px_10px_rgba(0,0,0,0.02)]">
+      <nav className="h-20 bg-white border-t border-slate-200 flex justify-around items-center px-2 pb-safe z-50 shadow-[0_-5px_10px_rgba(0,0,0,0.02)] safe-area-bottom">
         <button 
             onClick={() => setView('tree')}
             className={`flex flex-col items-center p-2 rounded-xl transition-colors ${view === 'tree' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'}`}
